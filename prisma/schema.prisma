@@ -1,0 +1,282 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+// generator factories {
+//   provider = "prisma-factory"
+// }
+
+model cities {
+  id       Int    @id @default(autoincrement())
+  state_id Int
+  name     String @db.VarChar(150)
+}
+
+model countries {
+  id         Int    @id @default(autoincrement())
+  name_code  String @db.VarChar(20)
+  name       String @db.VarChar(100)
+  phone_code Int
+}
+
+model states {
+  id         Int    @id @default(autoincrement())
+  country_id Int
+  name       String @db.VarChar(255)
+}
+
+model users {
+  id                         Int                @id @default(autoincrement())
+  first_name                 String?            @db.VarChar(100)
+  last_name                  String?            @db.VarChar(100)
+  name                       String?            @db.VarChar(200)
+  phone                      String?            @db.VarChar(100)
+  email                      String?            @unique @db.VarChar(150)
+  address                    String?            @db.Text()
+  law_firm_name              String?            @db.VarChar(255)
+  is_oregon_state_bar_member Int                @default(0)
+  oregon_state_bar_number    String?            @db.VarChar(100)
+  eoir_registered            Int                @default(0)
+  languages_supports         String?            @db.Text()
+  practice_areas             String?            @db.Text()
+  role_id                    Int                @default(0)
+  password                   String?            @db.VarChar(255)
+  created_at                 DateTime?          @default(now())
+  updated_at                 DateTime?          @db.Timestamp(0)
+  status                     Int                @default(1)
+  is_first_login             Int                @default(1)
+  /// On boarding process status [0 => Not Sent, 1 => Sent, 2 => Completed]
+  on_board_status            Int                @default(0)
+  verified                   Int                @default(0)
+  verification_code          String?            @db.VarChar(20)
+  code_valid_till            DateTime?
+  role                       roles              @relation(fields: [role_id], references: [id])
+  cases                      cases[]
+  case_invitations           case_invitations[]
+  attorney_answers           attorney_answers[]
+  case_documents             case_documents[]
+  case_invoices              case_invoices[]
+  payments                   payments[]
+  group_members              group_members[]
+
+  @@index([role_id])
+}
+
+model roles {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique @db.VarChar(150)
+  status      Int           @default(1)
+  added_on    DateTime      @default(now())
+  users       users[]
+  permissions permissions[]
+}
+
+model cases {
+  id                   Int                @id @default(autoincrement())
+  case_number          String             @unique @db.VarChar(50)
+  title                String             @db.VarChar(255)
+  description          String             @db.LongText
+  added_by             Int
+  status               Int                @default(0)
+  maximum_compensation Decimal            @db.Decimal(10, 2)
+  hourly_rate          Decimal?           @db.Decimal(10, 2)
+  user                 users              @relation(fields: [added_by], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  clients              String?            @db.LongText
+  case_milestones      case_milestones[]
+  case_documents       case_documents[]
+  case_invitations     case_invitations[]
+  created_at           DateTime           @default(now())
+  logs                 logs[]
+  case_invoices        case_invoices[]
+
+  @@index([added_by])
+}
+
+model case_invoices {
+  id               Int        @id @default(autoincrement())
+  case_id          Int
+  user_id          Int
+  name             String?
+  particulars      String     @db.LongText
+  files            String?    @db.LongText
+  total_amount     Decimal    @db.Decimal(10, 2)
+  added_on         DateTime   @default(now())
+  due_on           DateTime   @db.Date
+  withdraw_remarks String?    @db.LongText
+  /// Invoice Status [0 => draft, 1 => sent, 2 => partially paid, 3 => full paid]
+  status           Int        @default(0)
+  case             cases      @relation(fields: [case_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  user             users      @relation(fields: [user_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  payments         payments[]
+
+  @@index([user_id])
+  @@index([case_id])
+}
+
+model invoice_categories {
+  id   Int    @id @default(autoincrement())
+  name String @db.Text
+}
+
+model payments {
+  id              Int           @id @default(autoincrement())
+  case_invoice_id Int
+  user_id         Int
+  amount          Decimal       @db.Decimal(10, 2)
+  remarks         String?       @db.Text
+  added_on        DateTime      @default(now())
+  case_invoice    case_invoices @relation(fields: [case_invoice_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  user            users         @relation(fields: [user_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([case_invoice_id])
+}
+
+model contracts {
+  id       Int      @id @default(autoincrement())
+  content  String   @db.LongText
+  added_on DateTime @default(now())
+}
+
+model case_invitations {
+  id         Int      @id @default(autoincrement())
+  case_id    Int
+  user_id    Int
+  status     Int      @default(0) // [0=>sent, 1=> accepted, 2=>expired]
+  first_name String?  @db.VarChar(100)
+  last_name  String?  @db.VarChar(100)
+  contract   String?  @db.LongText
+  case       cases    @relation(fields: [case_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user       users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  sent_on    DateTime @default(now())
+
+  @@index([user_id])
+  @@index([case_id])
+}
+
+model case_milestones {
+  id             Int      @id @default(autoincrement())
+  case_id        Int
+  milestone_date DateTime
+  comment        String   @db.VarChar(255)
+  case           cases    @relation(fields: [case_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([case_id])
+}
+
+model case_documents {
+  id            Int      @id @default(autoincrement())
+  case_id       Int
+  uploaded_by   Int?
+  document_name String   @db.VarChar(100)
+  file_name     String   @db.VarChar(100)
+  uploaded_on   DateTime @default(now())
+  case          cases    @relation(fields: [case_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user          users?   @relation(fields: [uploaded_by], references: [id], onUpdate: NoAction, onDelete: SetNull)
+
+  @@index([uploaded_by])
+  @@index([case_id])
+}
+
+model routes {
+  id          Int           @id @default(autoincrement())
+  parent_id   Int           @default(0)
+  label       String?       @db.VarChar(50)
+  url         String?       @db.VarChar(200)
+  icon        String?       @db.VarChar(50)
+  method      String        @default("get") @db.VarChar(100)
+  permissions permissions[]
+  parent      routes?       @relation("ParentToRoutes", fields: [parent_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children    routes[]      @relation("ParentToRoutes")
+
+  @@index([parent_id])
+}
+
+model permissions {
+  id       Int    @id @default(autoincrement())
+  role_id  Int
+  route_id Int
+  route    routes @relation(fields: [route_id], references: [id])
+  role     roles? @relation(fields: [role_id], references: [id])
+
+  @@index([role_id])
+  @@index([route_id])
+}
+
+model questions {
+  id               Int                @id @default(autoincrement())
+  question         String             @db.Text
+  sequence         Int                @default(0)
+  status           Boolean            @default(true)
+  options          options[]
+  attorney_answers attorney_answers[]
+}
+
+model options {
+  id               Int                @id @default(autoincrement())
+  question_id      Int
+  option           String             @db.Text
+  status           Boolean            @default(false)
+  question         questions          @relation(fields: [question_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  attorney_answers attorney_answers[]
+
+  @@index([question_id])
+}
+
+model email_templates {
+  id         Int    @id @default(autoincrement())
+  subject    String @db.VarChar(255)
+  from_email String @db.VarChar(100)
+  from_label String @db.VarChar(100)
+  content    String @db.LongText
+}
+
+model attorney_answers {
+  id          Int       @id @default(autoincrement())
+  user_id     Int
+  question_id Int
+  answer_id   Int?
+  user        users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  answer      options?  @relation(fields: [answer_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  question    questions @relation(fields: [question_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([question_id])
+  @@index([answer_id])
+  @@index([user_id])
+}
+
+model logs {
+  id         Int      @id @default(autoincrement())
+  case_id    Int?
+  content    String?  @db.LongText
+  created_at DateTime @default(now())
+  case       cases?   @relation(fields: [case_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+
+  @@index([case_id])
+}
+
+model groups {
+  id            Int             @id @default(autoincrement())
+  name          String?         @db.Text()
+  description   String?         @db.Text()
+  sequence      Int             @default(0)
+  group_members group_members[]
+}
+
+model group_members {
+  id       Int      @id @default(autoincrement())
+  group_id Int
+  user_id  Int
+  added_on DateTime @default(now())
+  groups   groups?  @relation(fields: [group_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  user     users    @relation(fields: [user_id], references: [id])
+
+  @@index([group_id])
+  @@index([user_id])
+}

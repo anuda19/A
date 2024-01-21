@@ -1,0 +1,183 @@
+.contract-box {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-height: 200px;
+  max-height: 205px;
+  overflow-y: auto;
+  padding: 5px;
+  background-color: #fafafa;
+}
+
+.activity-feed {
+  padding: 15px;
+  list-style: none;
+}
+
+.activity-feed .feed-item {
+  position: relative;
+  padding-bottom: 20px;
+  padding-left: 30px;
+  border-left: 2px solid #e4e8eb;
+}
+
+.activity-feed .feed-item:last-child {
+  border-color: transparent;
+}
+
+.activity-feed .feed-item::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: -6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid #f37167;
+}
+
+.activity-feed .feed-item .date {
+  display: block;
+  position: relative;
+  top: -5px;
+  color: #8c96a3;
+  text-transform: capitalize;
+  font-size: 13px;
+}
+
+.activity-feed .feed-item .text {
+  position: relative;
+  top: -3px;
+}
+
+.case_invitation .row {
+  padding: 10px;
+  border-bottom: 0.002px solid #dfdada;
+  margin: 5px;
+}
+
+.case_invitation .row:last-child {
+  border: none;
+}
+
+.milestones {
+  border-bottom: 0.2px solid rgb(214, 218, 222);
+}
+
+.milestones:last-child {
+  border: none;
+}
+
+.invoice-container {
+  background-color: #eee;
+  width: 100%;
+  margin: 0;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.invoice-fieldset {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 10px;
+  animation-delay: 0.2s;
+  animation: FieldsetAnimation 0.3s ease forwards;
+  background-color: #f0dddd;
+  padding: 10px;
+}
+
+.table-border td,
+.table-border th {
+  border-width: 1px !important;
+}
+
+.invoice_category {
+  position: relative;
+}
+
+.css-1nmdiq5-menu {
+  z-index: 1 !important;
+  position: absolute;
+}
+
+.css-t3ipsp-control {
+  min-height: 58px !important;
+}
+
+.css-13cymwt-control {
+  min-height: 58px !important;
+  background-color: #f9f9f9;
+}
+
+@keyframes FieldsetAnimation {
+  0% {
+    opacity: 0;
+    margin-top: -60px;
+  }
+
+  100% {
+    opacity: 1;
+    margin-top: 0px;
+  }
+}
+
+.filepond--wrapper {
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+.filepond--credits {
+  display: none !important;
+}
+
+.files-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  margin-bottom: 10px;
+}
+
+.files-list li {
+  display: inline-block;
+  background-color: #d1d1d1;
+  border-radius: 6px;
+  text-align: center;
+  margin: 5px;
+  width: 100px;
+  transition: .3s;
+  cursor: pointer;
+}
+
+.files-list li a {
+  padding: 10px;
+  padding-top: 0;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 1.5;
+  display: block;
+  overflow: hidden;
+  color: black;
+}
+
+.inv-file-icon {
+  font-size: 40px;
+  display: block;
+  margin: auto;
+  color: #990000;
+  height: 60px;
+}
+
+.files-list li:hover {
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+.invoice-item {
+  height: 58px;
+  background-color: #f9f9f9;
+  border-radius: 0;
+}
