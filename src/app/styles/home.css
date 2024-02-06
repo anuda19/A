@@ -212,3 +212,108 @@
     font-weight: 300;
     color: #999999;
 }
+
+/* Services */
+.services_main img {
+   max-width: 100%;
+   height: 200px;
+}
+.services_main {
+   padding: 1em 0;
+}
+
+.services_main .inner__content {
+   margin-bottom: 3em;
+}
+
+.services_main .inner__clr {
+   color: hsla(216, 97%, 61%, 1);
+}
+
+.services_main .inner__text {
+   text-align: left;
+}
+
+/*====== cards style ==========*/
+
+.services_main .cards-grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+   grid-gap: 4em 2rem;
+}
+
+.services_main .card {
+   border-radius: 6px;
+   box-shadow: 0 20px 40px 0 rgba(173, 181, 189, 0.1);
+   border: solid 1px rgba(129, 147, 174, 0.12);
+   background-color: #fff;
+   padding: 2.5em;
+   text-align: center;
+   position: relative;
+}
+
+.services_main .card:first-child::before {
+   content: "";
+   position: absolute;
+   background-color: #ffd25f;
+   top: -8px;
+   left: -1px;
+   width: calc(100% + 2px);
+   height: 8px;
+   border-radius: 6px 6px 0 0;
+}
+
+.services_main .card:nth-child(2)::before {
+   content: "";
+   position: absolute;
+   background-color: #63a2ff;
+   top: -8px;
+   left: -1px;
+   width: calc(100% + 2px);
+   height: 8px;
+   border-radius: 6px 6px 0 0;
+}
+
+.services_main .card:last-child::before {
+   content: "";
+   position: absolute;
+   background-color: #5ed291;
+   top: -8px;
+   left: -1px;
+   width: calc(100% + 2px);
+   height: 8px;
+   border-radius: 6px 6px 0 0;
+}
+
+.services_main .card__body {
+   padding-top: 1em;
+}
+
+@media (min-width: 750px) {
+   .inner {
+      padding: 1em 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      width: 100%;
+   }
+
+   .inner__sub {
+      --fs-h5: 1.8rem;
+      font-size: var(--fs-h5);
+   }
+   .inner__headings {
+      flex: 1 0 30%;
+   }
+   .inner__content {
+      flex: 1 0 50%;
+      align-self: center;
+      margin-left: 2rem;
+   }
+   .inner__sub {
+      margin-bottom: 0;
+   }
+   .inner__head {
+      --fs-h2: 4rem;
+   }
+}
