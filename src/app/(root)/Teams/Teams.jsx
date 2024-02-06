@@ -15,7 +15,7 @@ const Teams = () => {
                 />
               </div>
               <p class="text-blk name">Anurag Sinha</p>
-              <p class="text-blk position">Founder</p>
+              <p class="text-blk position">CEO</p>
               <p class="text-blk feature-text">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               </p>
@@ -45,7 +45,7 @@ const Teams = () => {
                 />
               </div>
               <p class="text-blk name">Ritik Raj</p>
-              <p class="text-blk position">Co-Founder</p>
+              <p class="text-blk position">CEO</p>
               <p class="text-blk feature-text">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               </p>
@@ -71,7 +71,7 @@ const Teams = () => {
                 <img class="team-member-image" src="/images/teams/amit.jpeg" />
               </div>
               <p class="text-blk name">Amit Singh</p>
-              <p class="text-blk position">Co-Founder</p>
+              <p class="text-blk position">CEO</p>
               <p class="text-blk feature-text">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               </p>
